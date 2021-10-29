@@ -1,5 +1,5 @@
 'use strict';
-const _item = ({type, value}, info, as) => {
+const _item = ([type, value], info, as) => {
   switch (type) {
     case 'primitive':
       return as(value);

@@ -18,7 +18,7 @@ const _serialize = (value, info) => {
 
   switch (typeof value) {
     case 'bigint':
-      return as({type: 'BigInt', value: value.toString()});
+      return as(['BigInt', value.toString()]);
     case 'object':
       if (value !== null) {
         const type = toString.call(value).slice(8, -1);
@@ -27,44 +27,44 @@ const _serialize = (value, info) => {
             const entries = [];
             for (const key of keys(value))
               entries.push([key, _serialize(value[key], info)]);
-            return as({type, value: entries});
+            return as([type, entries]);
           }
           case 'Boolean':
           case 'Number':
           case 'String':
-            return as({type, value: value.valueOf()});
+            return as([type, value.valueOf()]);
           case 'Date':
-            return as({type, value: value.toISOString()});
+            return as([type, value.toISOString()]);
           case 'RegExp': {
             const {source, flags} = value;
-            return as({type, value: {source, flags}});
+            return as([type, {source, flags}]);
           }
           case 'Map': {
-            const map = [];
+            const entries = [];
             for (const [key, entry] of value)
-              map.push([_serialize(key, info), _serialize(entry, info)]);
-            return as({type, value: map});
+              entries.push([_serialize(key, info), _serialize(entry, info)]);
+            return as([type, entries]);
           }
           case 'Array': {
             const arr = [];
             for (const entry of value)
               arr.push(_serialize(entry, info));
-            return as({type, value: arr});
+            return as([type, arr]);
           }
           case 'Set': {
-            const set = [];
+            const values = [];
             for (const entry of value)
-              set.push(_serialize(entry, info));
-            return as({type, value: set});
+              values.push(_serialize(entry, info));
+            return as([type, values]);
           }
         }
 
         if (type.includes('Array'))
-          return as({type, value: [...value]});
+          return as([type, [...value]]);
 
         if (type.includes('Error')) {
           const {message} = value;
-          return as({type: 'Error', value: {name: type, message}});
+          return as(['Error', {name: type, message}]);
         }
 
         throw new TypeError;
@@ -73,7 +73,7 @@ const _serialize = (value, info) => {
     case 'number':
     case 'string':
     case 'undefined':
-      return as({type: 'primitive', value});
+      return as(['primitive', value]);
     default:
       throw new TypeError;
   }
