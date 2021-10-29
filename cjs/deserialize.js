@@ -1,4 +1,6 @@
 'use strict';
+const env = typeof self === 'object' ? self : globalThis;
+
 const _deserialize = (index, $, _) => {
   if ($.has(index))
     return $.get(index);
@@ -45,7 +47,7 @@ const _deserialize = (index, $, _) => {
     }
     case 'Error': {
       const {name, message} = value;
-      return as(new globalThis[name](message));
+      return as(new env[name](message));
     }
     case 'Boolean':
       return as(new Boolean(value));
@@ -56,7 +58,7 @@ const _deserialize = (index, $, _) => {
     case 'BigInt':
       return as(BigInt(value));
   }
-  return as(new globalThis[type](value));
+  return as(new env[type](value));
 };
 
 /**
