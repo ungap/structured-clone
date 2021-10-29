@@ -1,6 +1,6 @@
 {
   "name": "@ungap/structured-clone",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "A structuredClone polyfill",
   "main": "./cjs/index.js",
   "scripts": {
@@ -9,7 +9,12 @@
     "coveralls": "c8 report --reporter=text-lcov | coveralls",
     "test": "c8 node test/index.js"
   },
-  "keywords": ["recursion", "structured", "clone", "algorithm"],
+  "keywords": [
+    "recursion",
+    "structured",
+    "clone",
+    "algorithm"
+  ],
   "author": "Andrea Giammarchi",
   "license": "ISC",
   "devDependencies": {
