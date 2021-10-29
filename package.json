@@ -1,0 +1,29 @@
+{
+  "name": "@ungap/structured-clone",
+  "version": "0.0.0",
+  "description": "A structuredClone polyfill",
+  "main": "./cjs/index.js",
+  "scripts": {
+    "build": "npm run cjs && npm run test",
+    "cjs": "ascjs esm cjs",
+    "coveralls": "c8 report --reporter=text-lcov | coveralls",
+    "test": "c8 node test/index.js"
+  },
+  "keywords": [],
+  "author": "Andrea Giammarchi",
+  "license": "ISC",
+  "devDependencies": {
+    "ascjs": "^5.0.1",
+    "c8": "^7.10.0",
+    "coveralls": "^3.1.1"
+  },
+  "module": "./esm/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "default": "./cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  }
+}
