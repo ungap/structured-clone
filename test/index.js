@@ -45,4 +45,6 @@ const deserialized = deserialize(serialized);
 
 console.assert(deserialized.arr[0] === deserialized);
 
-console.log(structuredClone([1, 1]));
+console.time('cloned in');
+structuredClone(obj);
+console.timeEnd('cloned in');

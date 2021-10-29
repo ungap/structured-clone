@@ -1,40 +1,48 @@
 'use strict';
-const _item = ([type, value], info, as) => {
+const _deserialize = (index, $, _) => {
+  if ($.has(index))
+    return $.get(index);
+
+  const [type, value] = _[index];
+
+  const as = deserialized => {
+    $.set(index, deserialized);
+    return deserialized;
+  };
+
   switch (type) {
     case 'primitive':
       return as(value);
+    case 'Array': {
+      const arr = as([]);
+      for (const index of value)
+        arr.push(_deserialize(index, $, _));
+      return arr;
+    }
+    case 'Object': {
+      const object = as({});
+      for (const [key, index] of value)
+        object[key] = _deserialize(index, $, _);
+      return object;
+    }
     case 'Date':
       return as(new Date(value));
     case 'RegExp': {
       const {source, flags} = value;
       return as(new RegExp(source, flags));
     }
-    case 'Object': {
-      const object = as({});
-      for (const [key, index] of value)
-        object[key] = _deserialize(index, info);
-      return object;
-    }
-    case 'Array': {
-      const arr = as([]);
-      for (const index of value)
-        arr.push(_deserialize(index, info));
-      return arr;
-    }
     case 'Map': {
       const map = as(new Map);
       for (const [key, index] of value)
-        map.set(key, _deserialize(index, info));
+        map.set(key, _deserialize(index, $, _));
       return map;
     }
     case 'Set': {
       const set = as(new Set);
       for (const index of value)
-        set.add(_deserialize(index, info));
+        set.add(_deserialize(index, $, _));
       return set;
     }
-    case 'BigInt':
-      return as(BigInt(value));
     case 'Error': {
       const {name, message} = value;
       return as(new globalThis[name](message));
@@ -45,25 +53,20 @@ const _item = ([type, value], info, as) => {
       return as(new Number(value));
     case 'String':
       return as(new String(value));
+    case 'BigInt':
+      return as(BigInt(value));
   }
   return as(new globalThis[type](value));
 };
 
-const _deserialize = (index, info) => {
-  const {$, _} = info;
-  if ($.has(index))
-    return $.get(index);
-
-  return _item(_[index], info, deserialized => {
-    $.set(index, deserialized);
-    return deserialized;
-  });
-};
+/**
+ * @typedef {Array<string,any>} Record a type representation
+ */
 
 /**
  * Returns a deserialized value from a serialized array of Records.
  * @param {Record[]} serialized a previously serialized value.
  * @returns {any}
  */
-const deserialize = (_) => _deserialize(0, {$: new Map, _});
+const deserialize = serialized => _deserialize(0, new Map, serialized);
 exports.deserialize = deserialize;
