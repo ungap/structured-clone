@@ -11,6 +11,11 @@ An env agnostic serializer and deserializer with recursion ability and types bey
 
 Serialized values can be safely stringified as *JSON* too, and deserialization resurrect all values, even recursive, or more complex than what *JSON* allows.
 
+
+### Example
+
+Check the [100% test coverage](./test/index.js) to know even more.
+
 ```js
 // as default export
 import structuredClone from '@ungap/structured-clone';
