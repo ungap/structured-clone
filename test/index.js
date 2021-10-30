@@ -39,6 +39,8 @@ test();
 delete require.cache[require.resolve('../cjs')];
 delete require.cache[require.resolve('../cjs/deserialize.js')];
 globalThis.self = globalThis;
+if (!globalThis.structuredClone)
+  globalThis.structuredClone = any => deserialize(serialize(any));
 require('../cjs');
 
 ({serialize, deserialize, default: structuredClone} = require('../cjs'));

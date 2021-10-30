@@ -13,6 +13,8 @@ const dflt = {transfer: []};
  *  This is currently not supported, all values are always cloned.
  * @returns {Record[]}
  */
-export default (any, options = dflt) => deserialize(serialize(any, options));
+export default typeof structuredClone === "function" ?
+  structuredClone :
+  (any, options = dflt) => deserialize(serialize(any, options));
 
 export {deserialize, serialize};

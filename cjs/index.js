@@ -14,7 +14,9 @@ const dflt = {transfer: []};
  *  This is currently not supported, all values are always cloned.
  * @returns {Record[]}
  */
-Object.defineProperty(exports, '__esModule', {value: true}).default = (any, options = dflt) => deserialize(serialize(any, options));
+Object.defineProperty(exports, '__esModule', {value: true}).default = typeof structuredClone === "function" ?
+  structuredClone :
+  (any, options = dflt) => deserialize(serialize(any, options));
 
 exports.deserialize = deserialize;
 exports.serialize = serialize;
