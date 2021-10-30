@@ -1,4 +1,8 @@
 'use strict';
+const {
+  PRIMITIVE, ARRAY, OBJECT, DATE, REGEXP, MAP, SET, ERROR, BIGINT
+} = require('./types.js');
+
 const env = typeof self === 'object' ? self : globalThis;
 
 const _deserialize = (index, $, _) => {
@@ -13,49 +17,43 @@ const _deserialize = (index, $, _) => {
   };
 
   switch (type) {
-    case 'primitive':
+    case PRIMITIVE:
       return as(value);
-    case 'Array': {
+    case ARRAY: {
       const arr = as([]);
       for (const index of value)
         arr.push(_deserialize(index, $, _));
       return arr;
     }
-    case 'Object': {
+    case OBJECT: {
       const object = as({});
       for (const [key, index] of value)
-        object[key] = _deserialize(index, $, _);
+        object[_deserialize(key, $, _)] = _deserialize(index, $, _);
       return object;
     }
-    case 'Date':
+    case DATE:
       return as(new Date(value));
-    case 'RegExp': {
+    case REGEXP: {
       const {source, flags} = value;
       return as(new RegExp(source, flags));
     }
-    case 'Map': {
+    case MAP: {
       const map = as(new Map);
       for (const [key, index] of value)
-        map.set(key, _deserialize(index, $, _));
+        map.set(_deserialize(key, $, _), _deserialize(index, $, _));
       return map;
     }
-    case 'Set': {
+    case SET: {
       const set = as(new Set);
       for (const index of value)
         set.add(_deserialize(index, $, _));
       return set;
     }
-    case 'Error': {
+    case ERROR: {
       const {name, message} = value;
       return as(new env[name](message));
     }
-    case 'Boolean':
-      return as(new Boolean(value));
-    case 'Number':
-      return as(new Number(value));
-    case 'String':
-      return as(new String(value));
-    case 'BigInt':
+    case BIGINT:
       return as(BigInt(value));
   }
   return as(new env[type](value));

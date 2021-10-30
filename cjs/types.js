@@ -1,0 +1,21 @@
+'use strict';
+let i = 0;
+
+const PRIMITIVE = i++;
+exports.PRIMITIVE = PRIMITIVE;
+const ARRAY = i++;
+exports.ARRAY = ARRAY;
+const OBJECT = i++;
+exports.OBJECT = OBJECT;
+const DATE = i++;
+exports.DATE = DATE;
+const REGEXP = i++;
+exports.REGEXP = REGEXP;
+const MAP = i++;
+exports.MAP = MAP;
+const SET = i++;
+exports.SET = SET;
+const ERROR = i++;
+exports.ERROR = ERROR;
+const BIGINT = i++;
+exports.BIGINT = BIGINT;
