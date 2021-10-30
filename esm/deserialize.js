@@ -56,6 +56,8 @@ const _deserialize = (index, $, _) => {
     }
     case BIGINT:
       return as(BigInt(value));
+    case 'BigInt':
+      return as(Object(BigInt(value)));
   }
   return as(new env[type](value));
 };

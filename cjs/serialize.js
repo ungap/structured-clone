@@ -53,6 +53,8 @@ const _serialize = (value, $, _) => {
           case 'Number':
           case 'String':
             return as([type, value.valueOf()]);
+          case 'BigInt':
+            return as([type, value.toString()]);
         }
 
         if (type.includes('Array'))
