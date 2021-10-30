@@ -1,6 +1,6 @@
 # structuredClone polyfill
 
-[![build status](https://github.com/WebReflection/structured-clone/actions/workflows/node.js.yml/badge.svg)](https://github.com/WebReflection/structured-clone/actions) [![Coverage Status](https://coveralls.io/repos/github/WebReflection/structured-clone/badge.svg?branch=main)](https://coveralls.io/github/WebReflection/structured-clone?branch=main)
+[![build status](https://github.com/ungap/structured-clone/actions/workflows/node.js.yml/badge.svg)](https://github.com/ungap/structured-clone/actions) [![Coverage Status](https://coveralls.io/repos/github/ungap/structured-clone/badge.svg?branch=main)](https://coveralls.io/github/ungap/structured-clone?branch=main)
 
 An env agnostic serializer and deserializer with recursion ability and types beyond *JSON* from the *HTML* standard itself.
 
