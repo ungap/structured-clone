@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run cjs && npm run test",
     "cjs": "ascjs esm cjs",
-    "coveralls": "c8 report --reporter=text-lcov | coveralls",
+    "coverage": "c8 report --reporter=text-lcov > ./coverage/lcov.info",
     "test": "c8 node test/index.js"
   },
   "keywords": [

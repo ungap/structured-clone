@@ -1,3 +1,9 @@
+import {
+  PRIMITIVE, ARRAY, OBJECT,
+  DATE, REGEXP, MAP, SET,
+  ERROR, BIGINT
+} from './types.js';
+
 const {toString} = {};
 const {keys} = Object;
 
@@ -19,30 +25,30 @@ const _serialize = (value, $, _) => {
         const type = toString.call(value).slice(8, -1);
         switch (type) {
           case 'Array':
-            return as([type, value.map(entry => _serialize(entry, $, _))]);
+            return as([ARRAY, value.map(entry => _serialize(entry, $, _))]);
           case 'Object': {
             const entries = [];
             for (const key of keys(value))
-              entries.push([key, _serialize(value[key], $, _)]);
-            return as([type, entries]);
+              entries.push([_serialize(key, $, _), _serialize(value[key], $, _)]);
+            return as([OBJECT, entries]);
           }
           case 'Date':
-            return as([type, value.toISOString()]);
+            return as([DATE, value.toISOString()]);
           case 'RegExp': {
             const {source, flags} = value;
-            return as([type, {source, flags}]);
+            return as([REGEXP, {source, flags}]);
           }
           case 'Map': {
             const entries = [];
             for (const [key, entry] of value)
               entries.push([_serialize(key, $, _), _serialize(entry, $, _)]);
-            return as([type, entries]);
+            return as([MAP, entries]);
           }
           case 'Set': {
             const values = [];
             for (const entry of value)
               values.push(_serialize(entry, $, _));
-            return as([type, values]);
+            return as([SET, values]);
           }
           case 'Boolean':
           case 'Number':
@@ -55,7 +61,7 @@ const _serialize = (value, $, _) => {
 
         if (type.includes('Error')) {
           const {message} = value;
-          return as(['Error', {name: type, message}]);
+          return as([ERROR, {name: type, message}]);
         }
 
         throw new TypeError;
@@ -64,9 +70,9 @@ const _serialize = (value, $, _) => {
     case 'number':
     case 'string':
     case 'undefined':
-      return as(['primitive', value]);
+      return as([PRIMITIVE, value]);
     case 'bigint':
-      return as(['BigInt', value.toString()]);
+      return as([BIGINT, value.toString()]);
     default:
       throw new TypeError;
   }
