@@ -123,9 +123,14 @@ const lossy = structuredClone(
     {
       test() {},
       sym: Symbol()
+    },
+    {
+      toJSON() {
+        return 'OK';
+      }
     }
   ],
-  {lossy: true}
+  {json: true}
 );
 
 assert(lossy[0], 1);
@@ -133,3 +138,4 @@ assert(lossy[1], null);
 assert(lossy[2].size, 0);
 assert(lossy[3].size, 0);
 assert(JSON.stringify(lossy[4]), '{}');
+assert(lossy[5], 'OK');

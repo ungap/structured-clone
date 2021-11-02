@@ -56,3 +56,7 @@ const cloned = structuredClone({
 ```
 
 The behavior is the same found in *JSON* when it comes to *Array*, so that unsupported values will result as `null` placeholders instead.
+
+#### toJSON
+
+If `lossy` option is not enough, `json` will actually enforce `lossy` and also check for `toJSON` method when objects are parsed.
