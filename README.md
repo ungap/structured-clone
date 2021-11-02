@@ -34,3 +34,25 @@ const serialized = serialize({any: 'serializable'});
 // the result will be a replica of the original object
 const deserialized = deserialize(serialized);
 ```
+
+### Extra Features
+
+There is no middle-ground between the structured clone algorithm and JSON:
+
+  * JSON is more relaxed about incompatible values: it just ignores these
+  * Structured clone is inflexible regarding incompatible values, yet it makes specialized instances impossible to reconstruct, plus it doesn't offer any helper, such as `toJSON()`, to make serialization possible, or better, with specific cases
+
+This module specialized `serialize` export offers, within the optional extra argument, a **lossy** property to avoid throwing when incompatible types are found down the road (function, symbol, ...), so that it is possible to send with less worrying about thrown errors.
+
+```js
+// as default export
+import structuredClone from '@ungap/structured-clone';
+const cloned = structuredClone({
+  method() {
+    // ignored, won't be cloned
+  },
+  special: Symbol('also ignored')
+});
+```
+
+The behavior is the same found in *JSON* when it comes to *Array*, so that unsupported values will result as `null` placeholders instead.

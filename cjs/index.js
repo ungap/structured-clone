@@ -1,7 +1,6 @@
 'use strict';
 const {deserialize} = require('./deserialize.js');
 const {serialize} = require('./serialize.js');
-const dflt = {transfer: []};
 
 /**
  * @typedef {Array<string,any>} Record a type representation
@@ -16,7 +15,7 @@ const dflt = {transfer: []};
  */
 Object.defineProperty(exports, '__esModule', {value: true}).default = typeof structuredClone === "function" ?
   structuredClone :
-  (any, options = dflt) => deserialize(serialize(any, options));
+  (any, options) => deserialize(serialize(any, options));
 
 exports.deserialize = deserialize;
 exports.serialize = serialize;

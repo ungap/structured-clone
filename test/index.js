@@ -40,7 +40,7 @@ delete require.cache[require.resolve('../cjs')];
 delete require.cache[require.resolve('../cjs/deserialize.js')];
 globalThis.self = globalThis;
 if (!globalThis.structuredClone)
-  globalThis.structuredClone = any => deserialize(serialize(any));
+  globalThis.structuredClone = (...args) => deserialize(serialize(...args));
 require('../cjs');
 
 ({serialize, deserialize, default: structuredClone} = require('../cjs'));
@@ -106,17 +106,6 @@ function test(firstRun = false) {
       process.exit(1);
     }
     catch (ok) {}
-
-    try {
-      class Shenanigans {
-        get [Symbol.toStringTag]() {
-          return 'Shenanigans';
-        }
-      }
-      serialize(new Shenanigans);
-      process.exit(1);
-    }
-    catch (ok) {}
   }
 
   console.time('cloned in');
@@ -124,3 +113,23 @@ function test(firstRun = false) {
   console.timeEnd('cloned in');
   console.log('');
 }
+
+const lossy = structuredClone(
+  [
+    1,
+    function () {},
+    new Map([['key', Symbol()]]),
+    new Set([Symbol()]),
+    {
+      test() {},
+      sym: Symbol()
+    }
+  ],
+  {lossy: true}
+);
+
+assert(lossy[0], 1);
+assert(lossy[1], null);
+assert(lossy[2].size, 0);
+assert(lossy[3].size, 0);
+assert(JSON.stringify(lossy[4]), '{}');

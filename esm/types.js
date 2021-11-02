@@ -1,11 +1,10 @@
-let i = 0;
-
-export const PRIMITIVE = i++;
-export const ARRAY = i++;
-export const OBJECT = i++;
-export const DATE = i++;
-export const REGEXP = i++;
-export const MAP = i++;
-export const SET = i++;
-export const ERROR = i++;
-export const BIGINT = i++;
+export const PRIMITIVE  = 0;
+export const ARRAY      = 1;
+export const OBJECT     = 2;
+export const DATE       = 3;
+export const REGEXP     = 4;
+export const MAP        = 5;
+export const SET        = 6;
+export const ERROR      = 7;
+export const BIGINT     = 8;
+// export const SYMBOL = 9;

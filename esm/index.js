@@ -1,6 +1,5 @@
 import {deserialize} from './deserialize.js';
 import {serialize} from './serialize.js';
-const dflt = {transfer: []};
 
 /**
  * @typedef {Array<string,any>} Record a type representation
@@ -15,6 +14,6 @@ const dflt = {transfer: []};
  */
 export default typeof structuredClone === "function" ?
   structuredClone :
-  (any, options = dflt) => deserialize(serialize(any, options));
+  (any, options) => deserialize(serialize(any, options));
 
 export {deserialize, serialize};
