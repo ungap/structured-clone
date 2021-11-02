@@ -47,12 +47,20 @@ This module specialized `serialize` export offers, within the optional extra arg
 ```js
 // as default export
 import structuredClone from '@ungap/structured-clone';
-const cloned = structuredClone({
-  method() {
-    // ignored, won't be cloned
+const cloned = structuredClone(
+  {
+    method() {
+      // ignored, won't be cloned
+    },
+    special: Symbol('also ignored')
   },
-  special: Symbol('also ignored')
-});
+  {
+    // avoid throwing
+    lossy: true,
+    // avoid throwing *and* looks for toJSON
+    json: true
+  }
+);
 ```
 
 The behavior is the same found in *JSON* when it comes to *Array*, so that unsupported values will result as `null` placeholders instead.
