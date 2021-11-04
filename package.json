@@ -29,6 +29,10 @@
       "import": "./esm/index.js",
       "default": "./cjs/index.js"
     },
+    "./json": {
+      "import": "./esm/json.js",
+      "default": "./cjs/json.js"
+    },
     "./package.json": "./package.json"
   },
   "directories": {

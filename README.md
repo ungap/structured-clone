@@ -68,3 +68,11 @@ The behavior is the same found in *JSON* when it comes to *Array*, so that unsup
 #### toJSON
 
 If `lossy` option is not enough, `json` will actually enforce `lossy` and also check for `toJSON` method when objects are parsed.
+
+Alternative, the `json` exports combines all features:
+
+```js
+import {stringify, parse} from '@ungap/structured-clone/json';
+
+parse(stringify({any: 'serializable'}));
+```

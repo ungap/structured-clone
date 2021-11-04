@@ -151,9 +151,8 @@ const serializer = (strict, json, $, _) => {
  *  like JSON stringify would behave. Symbol and Function will be discarded.
  * @returns {Record[]}
  */
- const serialize = (value, options = {}) => {
+ const serialize = (value, {json, lossy} = {}) => {
   const _ = [];
-  const json = !!options.json;
-  return serializer(!(json || options.lossy), json, new Map, _)(value), _;
+  return serializer(!(json || lossy), !!json, new Map, _)(value), _;
 };
 exports.serialize = serialize;

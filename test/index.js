@@ -1,4 +1,5 @@
 let {serialize, deserialize, default: structuredClone} = require('../cjs');
+let {stringify, parse} = require('../cjs/json');
 
 const assert = (expected, result, message = '') => {
   if (!Object.is(expected, result)) {
@@ -139,3 +140,11 @@ assert(lossy[2].size, 0);
 assert(lossy[3].size, 0);
 assert(JSON.stringify(lossy[4]), '{}');
 assert(lossy[5], 'OK');
+
+const lossy2 = parse(stringify(lossy));
+assert(lossy2[0], 1);
+assert(lossy2[1], null);
+assert(lossy2[2].size, 0);
+assert(lossy2[3].size, 0);
+assert(JSON.stringify(lossy2[4]), '{}');
+assert(lossy2[5], 'OK');
