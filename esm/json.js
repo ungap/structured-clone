@@ -1,3 +1,5 @@
+/*! (c) Andrea Giammarchi - ISC */
+
 import {deserialize} from './deserialize.js';
 import {serialize} from './serialize.js';
 

@@ -1,9 +1,11 @@
 import {nodeResolve} from '@rollup/plugin-node-resolve';
+import {terser} from 'rollup-plugin-terser';
 
 export default {
   input: './esm/json.js',
   plugins: [
-    nodeResolve()
+    nodeResolve(),
+    terser()
   ],
   output: {
     esModule: false,

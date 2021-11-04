@@ -1,4 +1,6 @@
 'use strict';
+/*! (c) Andrea Giammarchi - ISC */
+
 const {deserialize} = require('./deserialize.js');
 const {serialize} = require('./serialize.js');
 
