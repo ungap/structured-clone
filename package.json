@@ -4,9 +4,10 @@
   "description": "A structuredClone polyfill",
   "main": "./cjs/index.js",
   "scripts": {
-    "build": "npm run cjs && npm run test",
+    "build": "npm run cjs && npm run rollup:json && npm run test",
     "cjs": "ascjs esm cjs",
     "coverage": "c8 report --reporter=text-lcov > ./coverage/lcov.info",
+    "rollup:json": "rollup --config rollup/json.config.js",
     "test": "c8 node test/index.js"
   },
   "keywords": [
@@ -18,9 +19,11 @@
   "author": "Andrea Giammarchi",
   "license": "ISC",
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.0.6",
     "ascjs": "^5.0.1",
     "c8": "^7.10.0",
-    "coveralls": "^3.1.1"
+    "coveralls": "^3.1.1",
+    "rollup": "^2.59.0"
   },
   "module": "./esm/index.js",
   "type": "module",
