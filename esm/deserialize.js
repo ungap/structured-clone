@@ -6,60 +6,63 @@ import {
 
 const env = typeof self === 'object' ? self : globalThis;
 
-const _deserialize = (index, $, _) => {
-  if ($.has(index))
-    return $.get(index);
-
-  const [type, value] = _[index];
-
-  const as = deserialized => {
-    $.set(index, deserialized);
-    return deserialized;
+const deserializer = ($, _) => {
+  const as = (out, index) => {
+    $.set(index, out);
+    return out;
   };
 
-  switch (type) {
-    case PRIMITIVE:
-      return as(value);
-    case ARRAY: {
-      const arr = as([]);
-      for (const index of value)
-        arr.push(_deserialize(index, $, _));
-      return arr;
+  const unpair = index => {
+    if ($.has(index))
+      return $.get(index);
+
+    const [type, value] = _[index];
+    switch (type) {
+      case PRIMITIVE:
+        return as(value, index);
+      case ARRAY: {
+        const arr = as([], index);
+        for (const index of value)
+          arr.push(unpair(index));
+        return arr;
+      }
+      case OBJECT: {
+        const object = as({}, index);
+        for (const [key, index] of value)
+          object[unpair(key)] = unpair(index);
+        return object;
+      }
+      case DATE:
+        return as(new Date(value), index);
+      case REGEXP: {
+        const {source, flags} = value;
+        return as(new RegExp(source, flags), index);
+      }
+      case MAP: {
+        const map = as(new Map, index);
+        for (const [key, index] of value)
+          map.set(unpair(key), unpair(index));
+        return map;
+      }
+      case SET: {
+        const set = as(new Set, index);
+        for (const index of value)
+          set.add(unpair(index));
+        return set;
+      }
+      case ERROR: {
+        const {name, message} = value;
+        return as(new env[name](message), index);
+      }
+      case BIGINT:
+        return as(BigInt(value), index);
+      case 'BigInt':
+        return as(Object(BigInt(value)), index);
     }
-    case OBJECT: {
-      const object = as({});
-      for (const [key, index] of value)
-        object[_deserialize(key, $, _)] = _deserialize(index, $, _);
-      return object;
-    }
-    case DATE:
-      return as(new Date(value));
-    case REGEXP: {
-      const {source, flags} = value;
-      return as(new RegExp(source, flags));
-    }
-    case MAP: {
-      const map = as(new Map);
-      for (const [key, index] of value)
-        map.set(_deserialize(key, $, _), _deserialize(index, $, _));
-      return map;
-    }
-    case SET: {
-      const set = as(new Set);
-      for (const index of value)
-        set.add(_deserialize(index, $, _));
-      return set;
-    }
-    case ERROR: {
-      const {name, message} = value;
-      return as(new env[name](message));
-    }
-    case BIGINT:
-      return as(BigInt(value));
-    case 'BigInt':
-      return as(Object(BigInt(value)));
-  }
-  return as(new env[type](value));
+    return as(new env[type](value), index);
+  };
+
+  return unpair;
 };
 
 /**
@@ -71,4 +74,4 @@ const _deserialize = (index, $, _) => {
  * @param {Record[]} serialized a previously serialized value.
  * @returns {any}
  */
-export const deserialize = serialized => _deserialize(0, new Map, serialized);
+export const deserialize = serialized => deserializer(new Map, serialized)(0);
