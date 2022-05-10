@@ -1,6 +1,6 @@
 {
   "name": "@ungap/structured-clone",
-  "version": "0.3.4",
+  "version": "1.0.0",
   "description": "A structuredClone polyfill",
   "main": "./cjs/index.js",
   "scripts": {
