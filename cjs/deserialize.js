@@ -1,6 +1,6 @@
 'use strict';
 const {
-  PRIMITIVE, ARRAY, OBJECT, DATE, REGEXP, MAP, SET, ERROR, BIGINT
+  VOID, PRIMITIVE, ARRAY, OBJECT, DATE, REGEXP, MAP, SET, ERROR, BIGINT
 } = require('./types.js');
 
 const env = typeof self === 'object' ? self : globalThis;
@@ -18,6 +18,7 @@ const deserializer = ($, _) => {
     const [type, value] = _[index];
     switch (type) {
       case PRIMITIVE:
+      case VOID:
         return as(value, index);
       case ARRAY: {
         const arr = as([], index);

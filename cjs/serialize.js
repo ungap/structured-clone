@@ -1,6 +1,6 @@
 'use strict';
 const {
-  PRIMITIVE, ARRAY, OBJECT, DATE, REGEXP, MAP, SET, ERROR, BIGINT
+  VOID, PRIMITIVE, ARRAY, OBJECT, DATE, REGEXP, MAP, SET, ERROR, BIGINT
 } = require('./types.js');
 
 const EMPTY = '';
@@ -70,6 +70,8 @@ const serializer = (strict, json, $, _) => {
               throw new TypeError('unable to serialize ' + type);
             entry = null;
             break;
+          case 'undefined':
+            return as([VOID], value);
         }
         return as([TYPE, entry], value);
       }

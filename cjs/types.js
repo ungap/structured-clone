@@ -1,4 +1,6 @@
 'use strict';
+const VOID       = -1;
+exports.VOID = VOID;
 const PRIMITIVE  = 0;
 exports.PRIMITIVE = PRIMITIVE;
 const ARRAY      = 1;

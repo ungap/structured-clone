@@ -1,5 +1,6 @@
 import {
-  PRIMITIVE, ARRAY, OBJECT,
+  VOID, PRIMITIVE,
+  ARRAY, OBJECT,
   DATE, REGEXP, MAP, SET,
   ERROR, BIGINT
 } from './types.js';
@@ -19,6 +20,7 @@ const deserializer = ($, _) => {
     const [type, value] = _[index];
     switch (type) {
       case PRIMITIVE:
+      case VOID:
         return as(value, index);
       case ARRAY: {
         const arr = as([], index);
