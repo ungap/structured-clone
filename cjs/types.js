@@ -19,4 +19,6 @@ const ERROR      = 7;
 exports.ERROR = ERROR;
 const BIGINT     = 8;
 exports.BIGINT = BIGINT;
-// export const SYMBOL = 9;
+const BUFFER     = 9;
+exports.BUFFER = BUFFER;
+// export const SYMBOL = 10;

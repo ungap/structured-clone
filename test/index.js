@@ -62,7 +62,7 @@ function test(firstRun = false) {
   console.timeEnd('serialized in');
 
   assert(JSON.stringify(serialized), [
-    `[[2,[[1,2],[3,4],[5,6],[7,8],[9,10],[11,12],[13,14],[15,16],[17,18],[20,21],[23,24],[25,26],[27,28],[29,30],[31,32],[33,34],[35,36]]],[0,"arr"],[1,[0,0,0]],[0,"bigint"],[8,"1"],[0,"boolean"],[0,true],[0,"number"],[0,123],[0,"string"],[0,""],[0,"undefined"],[-1],[0,"null"],[0,null],[0,"int"],["Uint32Array",[1,2,3]],[0,"map"],[5,[[19,8]]],[0,"a"],[0,"set"],[6,[19,22]],[0,"b"],[0,"Bool"],["Boolean",false],[0,"Num"],["Number",0],[0,"Str"],["String",""],[0,"re"],[4,{"source":"test","flags":"gim"}],[0,"error"],[7,{"name":"Error","message":"test"}],[0,"BI"],["BigInt","1"],[0,"date"],[3,"${date.toISOString()}"]]`
+    `[[2,[[1,2],[3,4],[5,6],[7,8],[9,10],[11,12],[13,14],[15,16],[19,20],[22,23],[25,26],[27,28],[29,30],[31,32],[33,34],[35,36],[37,38]]],[0,"arr"],[1,[0,0,0]],[0,"bigint"],[8,"1"],[0,"boolean"],[0,true],[0,"number"],[0,123],[0,"string"],[0,""],[0,"undefined"],[-1],[0,"null"],[0,null],[0,"int"],["Uint32Array",18,0,3],[0,"AQAAAAIAAAADAAAA=="],[9,17],[0,"map"],[5,[[21,8]]],[0,"a"],[0,"set"],[6,[21,24]],[0,"b"],[0,"Bool"],["Boolean",false],[0,"Num"],["Number",0],[0,"Str"],["String",""],[0,"re"],[4,{"source":"test","flags":"gim"}],[0,"error"],[7,{"name":"Error","message":"test"}],[0,"BI"],["BigInt","1"],[0,"date"],[3,"${date.toISOString()}"]]`
   ].join(','));
 
   // firstRun && console.log(serialized);
@@ -105,6 +105,19 @@ function test(firstRun = false) {
   assert(deserialized.BI.valueOf(), 1n);
   assert(deserialized.date instanceof Date, true);
   assert(deserialized.date.toISOString(), date.toISOString());
+
+  const arrayBuffer = new Uint8Array([3,4,5]).buffer
+  const ser = serialize([
+    new Uint8Array([3,4,5]).buffer,
+    new Uint8Array([3,4,5]).buffer,
+    arrayBuffer,
+    arrayBuffer,
+    new Uint8Array(arrayBuffer, 1, 1)
+  ])
+  const dec = deserialize(ser)
+  assert(dec[0] !== dec[1], 'buf 0 & 1 should be different ArrayBuffer')
+  assert(dec[2] === dec[3], 'buf 2 & 3 should be the same ArrayBuffer')
+  assert(dec[2].buffer === dec[3], 'buf 3 & subArr should be the same ArrayBuffer')
 
   // for code coverage sake
   if (firstRun) {

@@ -1,6 +1,7 @@
+import { b64encode } from './b64.js'
 import {
   VOID, PRIMITIVE,
-  ARRAY, OBJECT,
+  ARRAY, OBJECT, BUFFER,
   DATE, REGEXP, MAP, SET,
   ERROR, BIGINT
 } from './types.js';
@@ -29,6 +30,8 @@ const typeOf = value => {
       return [MAP, EMPTY];
     case 'Set':
       return [SET, EMPTY];
+    case 'ArrayBuffer':
+      return [BUFFER, EMPTY];
   }
 
   if (asString.includes('Array'))
@@ -46,7 +49,6 @@ const shouldSkip = ([TYPE, type]) => (
 );
 
 const serializer = (strict, json, $, _) => {
-
   const as = (out, value) => {
     const index = _.push(out) - 1;
     $.set(value, index);
@@ -77,10 +79,18 @@ const serializer = (strict, json, $, _) => {
         }
         return as([TYPE, entry], value);
       }
+      case BUFFER: {
+        const b64 = b64encode(new Uint8Array(value));
+        return as([TYPE, pair(b64)], value)
+      }
       case ARRAY: {
-        if (type)
-          return as([type, [...value]], value);
-  
+        if (type) {
+          const arr = [type,, value.byteOffset, value.byteLength / value.BYTES_PER_ELEMENT]
+          const index = as(arr, value);
+          arr[1] = pair(value.buffer)
+          return index
+        }
+
         const arr = [];
         const index = as([TYPE, arr], value);
         for (const entry of value)
@@ -155,7 +165,7 @@ const serializer = (strict, json, $, _) => {
  *  like JSON stringify would behave. Symbol and Function will be discarded.
  * @returns {Record[]}
  */
- export const serialize = (value, {json, lossy} = {}) => {
+export const serialize = (value, {json, lossy} = {}) => {
   const _ = [];
   return serializer(!(json || lossy), !!json, new Map, _)(value), _;
 };

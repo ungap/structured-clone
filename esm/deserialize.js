@@ -1,11 +1,13 @@
+import { b64decode, b64encode } from './b64.js'
 import {
   VOID, PRIMITIVE,
-  ARRAY, OBJECT,
+  ARRAY, OBJECT, BUFFER,
   DATE, REGEXP, MAP, SET,
   ERROR, BIGINT
 } from './types.js';
 
 const env = typeof self === 'object' ? self : globalThis;
+const TypedArray = Reflect.getPrototypeOf(Uint8Array)
 
 const deserializer = ($, _) => {
   const as = (out, index) => {
@@ -17,11 +19,15 @@ const deserializer = ($, _) => {
     if ($.has(index))
       return $.get(index);
 
-    const [type, value] = _[index];
+    const [type, value, arg2, arg3] = _[index];
     switch (type) {
       case PRIMITIVE:
       case VOID:
         return as(value, index);
+      case BUFFER: {
+        const buf = b64decode(unpair(value)).buffer
+        return as(buf, index);
+      }
       case ARRAY: {
         const arr = as([], index);
         for (const index of value)
@@ -60,6 +66,10 @@ const deserializer = ($, _) => {
         return as(BigInt(value), index);
       case 'BigInt':
         return as(Object(BigInt(value)), index);
+    }
+    if (Reflect.getPrototypeOf(env[type]) === TypedArray) {
+      const ab = unpair(value);
+      return as(new env[type](ab, arg2, arg3), index);
     }
     return as(new env[type](value), index);
   };
