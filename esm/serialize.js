@@ -169,3 +169,5 @@ export const serialize = (value, {json, lossy} = {}) => {
   const _ = [];
   return serializer(!(json || lossy), !!json, new Map, _)(value), _;
 };
+
+console.log(serialize(new Uint8Array([3,2,1])))

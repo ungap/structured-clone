@@ -115,9 +115,10 @@ function test(firstRun = false) {
     new Uint8Array(arrayBuffer, 1, 1)
   ])
   const dec = deserialize(ser)
-  assert(dec[0] !== dec[1], 'buf 0 & 1 should be different ArrayBuffer')
-  assert(dec[2] === dec[3], 'buf 2 & 3 should be the same ArrayBuffer')
-  assert(dec[2].buffer === dec[3], 'buf 3 & subArr should be the same ArrayBuffer')
+  assert(new Uint8Array(dec[0]).join() === '3,4,5', 'buff still intact');
+  assert(dec[0] !== dec[1], 'buf 0 & 1 should be different ArrayBuffer');
+  assert(dec[2] === dec[3], 'buf 2 & 3 should be the same ArrayBuffer');
+  assert(dec[2].buffer === dec[3], 'buf 3 & subArr should be the same ArrayBuffer');
 
   // for code coverage sake
   if (firstRun) {

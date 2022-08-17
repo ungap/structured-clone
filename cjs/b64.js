@@ -1,44 +1,90 @@
 'use strict';
-var U = Uint8Array,
-r = (x, y, o = []) => {for(;x<=y;)o.push(x++);return o},
-f = [...r(65, 90), ...r(97, 122), ...r(48, 57), 45, 95, 61],
-h = [
-  ...Array(43).fill(0), 62, 0, 62, 0, 63, ...r(52, 61), 0, 0, 0,
-  64, 0, 0, 0, ...r(0, 25), 0, 0, 0, 0, 63, 0, ...r(26, 51), 0, 0
-]
+function range (start, end, result = []) {
+  for (;start <= end;) {
+    result.push(start++);
+  }
+  return result;
+}
+
+const encodingTable = [
+  ...range(65, 90),
+  ...range(97, 122),
+  ...range(48, 57), 45, 95, 61
+];
+
+const decodingTable = [
+  ...Array(43).fill(0), 62, 0, 62, 0, 63,
+  ...range(52, 61), 0, 0, 0, 64, 0, 0, 0,
+  ...range(0, 25), 0, 0, 0, 0, 63, 0,
+  ...range(26, 51), 0, 0
+];
 
 /**
  * convert base64 string to Uint8Array
- * @param {string} a
+ * @param {string} base64String
  */
-function b64decode(a) {
-  for (var _=a.charCodeAt.bind(a), b = a.length, f = '=' === a[b - 2] ? 2 : '=' === a[b - 1] ? 1 : 0, d = new U((.75 * a.length  + 0.5|0) - f), e = 0, g = b - f & 4294967292, c = 0; c < g; c += 4) b = h[_(c)] << 18 | h[_(c + 1)] << 12 | h[_(c + 2)] << 6 | h[_(c + 3)], d[e++] = b >> 16 & 255, d[e++] = b >> 8 & 255, d[e++] = b & 255;
-  1 === f && (b = h[_(c)] << 10 | h[_(c + 1)] << 4 | h[_(c + 2)] >> 2, d[e++] = b >> 8 & 255, d[e++] = b & 255);
-  2 === f && (b = h[_(c)] << 2 | h[_(c + 1)] >> 4, d[e++] = b & 255);
-  console.log(d)
-  return d
+function b64decode(base64String) {
+  const code = base64String.charCodeAt.bind(base64String);
+  const sourceLength = base64String.length;
+  const paddingLength = base64String[sourceLength - 2] === '='
+    ? 2 : base64String[sourceLength - 1] === '='
+    ? 1 : 0;
+  let i = base64String.length;
+  const uint8 = new Uint8Array((.75 * i + 0.5|0) - paddingLength);
+
+  for (var e = 0, g = i - paddingLength & 4294967292, c = 0; c < g; c += 4) {
+    i = decodingTable[code(c)] << 18 |
+        decodingTable[code(c + 1)] << 12 |
+        decodingTable[code(c + 2)] << 6 |
+        decodingTable[code(c + 3)];
+
+    uint8[e++] = i >> 16 & 255;
+    uint8[e++] = i >> 8 & 255;
+    uint8[e++] = i & 255;
+  }
+
+  if (paddingLength === 1) {
+    i = decodingTable[code(c)] << 10 |
+    decodingTable[code(c + 1)] << 4 |
+    decodingTable[code(c + 2)] >> 2;
+
+    uint8[e++] = i >> 8 & 255, uint8[e++] = i & 255;
+  }
+
+  if (paddingLength === 2) {
+    i = decodingTable[code(c)] << 2 | decodingTable[code(c + 1)] >> 4,
+    uint8[e++] = i & 255;
+  };
+
+  return uint8;
 }
-exports.b64decode = b64decode;
+exports.b64decode = b64decode
 
 /**
  * convert Uint8Array to base64 string
- * @param {Uint8Array} x
+ * @param {Uint8Array} uint8array
  */
-const b64encode = x => {
-  for (var b = -1, h = x.length, d = new U(Math.ceil(4 * h / 3)), e = 0; ++b < h;) {
-    var c = x[b],
-      g = x[++b];
-    d[e++] = f[c >> 2];
-    d[e++] = f[(c & 3) << 4 | g >> 4];
-    isNaN(g)
-      ? (d[e++] = f[64], d[e++] = f[64])
-      : (
-        c = x[++b],
-        d[e++] = f[(g & 15) << 2 | c >> 6],
-        d[e++] = f[isNaN(c) ? 64 : c & 63]
-      )
+function b64encode(uint8array) {
+  const len = uint8array.length;
+  const data = new Uint8Array(Math.ceil(4 * len / 3));
+
+  for (var i = -1, e = 0; ++i < len;) {
+    let code = uint8array[i];
+    const g = uint8array[++i];
+    data[e++] = encodingTable[code >> 2];
+    data[e++] = encodingTable[(code & 3) << 4 | g >> 4];
+
+    if (isNaN(g)) {
+      data[e++] = encodingTable[64],
+      data[e++] = encodingTable[64]
+    } else {
+      code = uint8array[++i],
+      data[e++] = encodingTable[(g & 15) << 2 | code >> 6],
+      data[e++] = encodingTable[isNaN(code) ? 64 : code & 63]
+    }
   }
-  const str = new TextDecoder().decode(d)
-  return str + (str.length % 3 === 2 ? '=' : str.length % 3 === 1 ? '==' : '')
+
+  const str = new TextDecoder().decode(data);
+  return str + (str.length % 3 === 2 ? '=' : str.length % 3 === 1 ? '==' : '');
 }
 exports.b64encode = b64encode
