@@ -7,7 +7,7 @@ import {
 } from './types.js';
 
 const env = typeof self === 'object' ? self : globalThis;
-const TypedArray = Reflect.getPrototypeOf(Uint8Array)
+const TypedArray = Object.getPrototypeOf(Uint8Array);
 
 const deserializer = ($, _) => {
   const as = (out, index) => {
@@ -67,7 +67,7 @@ const deserializer = ($, _) => {
       case 'BigInt':
         return as(Object(BigInt(value)), index);
     }
-    if (Reflect.getPrototypeOf(env[type]) === TypedArray) {
+    if (Object.getPrototypeOf(env[type]) === TypedArray) {
       const ab = unpair(value);
       return as(new env[type](ab, arg2, arg3), index);
     }
