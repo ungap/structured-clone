@@ -17,7 +17,7 @@ const deserializer = ($, _) => {
     if ($.has(index))
       return $.get(index);
 
-    const [type, value, arg2, arg3] = _[index];
+    const [type, value, ...args] = _[index];
     switch (type) {
       case PRIMITIVE:
       case VOID:
@@ -67,7 +67,7 @@ const deserializer = ($, _) => {
     }
     if (Object.getPrototypeOf(env[type]) === TypedArray) {
       const ab = unpair(value);
-      return as(new env[type](ab, arg2, arg3), index);
+      return as(new env[type](ab, ...args), index);
     }
     return as(new env[type](value), index);
   };
