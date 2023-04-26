@@ -14,7 +14,7 @@ An env agnostic serializer and deserializer with recursion ability and types bey
 Serialized values can be safely stringified as *JSON* too, and deserialization resurrect all values, even recursive, or more complex than what *JSON* allows.
 
 
-### Example
+### Examples
 
 Check the [100% test coverage](./test/index.js) to know even more.
 
@@ -34,6 +34,23 @@ const serialized = serialize({any: 'serializable'});
 // the result will be a replica of the original object
 const deserialized = deserialize(serialized);
 ```
+
+#### Global Polyfill
+Note: Only monkey patch the global if needed. This polyfill works just fine as an explicit import: `import structuredClone from "@ungap/structured-clone"`
+```js
+// Attach the polyfill as a Global function
+import structuredClone from "@ungap/structured-clone";
+if (!("structuredClone" in globalThis)) {
+  globalThis.structuredClone = structuredClone;
+}
+
+// Or don't monkey patch
+import structuredClone from "@ungap/structured-clone"
+// Just use it in the file
+structuredClone()
+```
+
+**Note**: Do not attach this module's default export directly to the global scope, whithout a conditional guard to detect a native implementation. In environments where there is a native global implementation of `structuredClone()` already, assignment to the global object will result in an infinite loop when `globalThis.structuredClone()` is called. See the example above for a safe way to provide the polyfill globally in your project.
 
 ### Extra Features
 
