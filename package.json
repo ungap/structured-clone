@@ -4,8 +4,9 @@
   "description": "A structuredClone polyfill",
   "main": "./cjs/index.js",
   "scripts": {
-    "build": "npm run cjs && npm run rollup:json && npm run test",
+    "build": "npm run cjs && npm run rollup:json && npm run test && npm run generate-types-from-jsdoc",
     "cjs": "ascjs esm cjs",
+    "generate-types-from-jsdoc": "npx -p typescript tsc esm/index.js cjs/index.js --declaration --allowJs --emitDeclarationOnly --skipLibCheck",
     "coverage": "c8 report --reporter=text-lcov > ./coverage/lcov.info",
     "rollup:json": "rollup --config rollup/json.config.js",
     "test": "c8 node test/index.js"
