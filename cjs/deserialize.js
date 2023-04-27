@@ -66,12 +66,8 @@ const deserializer = ($, _) => {
 };
 
 /**
- * @typedef {Array<string,any>} Record a type representation
- */
-
-/**
  * Returns a deserialized value from a serialized array of Records.
- * @param {Record[]} serialized a previously serialized value.
+ * @param {import('./types.js').Serialized[]} serialized a previously serialized value.
  * @returns {any}
  */
 const deserialize = serialized => deserializer(new Map, serialized)(0);

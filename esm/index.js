@@ -24,5 +24,3 @@ export default typeof structuredClone === "function" ?
   /* c8 ignore stop */
 
 export {deserialize, serialize};
-
-
