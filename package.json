@@ -3,10 +3,11 @@
   "version": "1.0.2",
   "description": "A structuredClone polyfill",
   "main": "./cjs/index.js",
+  "types": "./esm/index.d.ts",
   "scripts": {
     "build": "npm run cjs && npm run rollup:json && npm run test && npm run generate-types-from-jsdoc",
     "cjs": "ascjs esm cjs",
-    "generate-types-from-jsdoc": "npx -p typescript tsc esm/index.js esm/json.js cjs/index.js cjs/json.js --declaration --allowJs --emitDeclarationOnly --skipLibCheck",
+    "generate-types-from-jsdoc": "npx -p typescript tsc --build --clean && npx -p typescript tsc",
     "coverage": "c8 report --reporter=text-lcov > ./coverage/lcov.info",
     "rollup:json": "rollup --config rollup/json.config.js",
     "test": "c8 node test/index.js"
@@ -32,11 +33,13 @@
   "exports": {
     ".": {
       "import": "./esm/index.js",
-      "default": "./cjs/index.js"
+      "default": "./cjs/index.js",
+      "types": "./esm/index.d.ts"
     },
     "./json": {
       "import": "./esm/json.js",
-      "default": "./cjs/json.js"
+      "default": "./cjs/json.js",
+      "types": "./esm/json.d.ts"
     },
     "./package.json": "./package.json"
   },
