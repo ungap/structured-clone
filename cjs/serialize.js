@@ -143,11 +143,10 @@ const serializer = (strict, json, $, _) => {
 
 /**
  * Returns an array of serialized Records.
- * @param {any} value a serializable value.
- * @param {{lossy?: boolean, json?: boolean}} options an object with a `lossy` property that,
+ * @param value - a serializable value.
+ * @param options -  an object with a `lossy` property that,
  *  if `true`, will not throw errors on incompatible types, and behave more
  *  like JSON stringify would behave. Symbol and Function will be discarded.
- * @returns {import('./types.js').Serialized[]}
  */
  const serialize = (value, {json, lossy} = {}) => {
   const _ = [];

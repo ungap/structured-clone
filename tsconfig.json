@@ -1,9 +1,0 @@
-{
-  "include": ["./esm/*.js"],
-  "compilerOptions": {
-    "allowJs": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "skipDefaultLibCheck": true
-  }
-}

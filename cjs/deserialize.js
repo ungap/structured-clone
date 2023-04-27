@@ -67,8 +67,7 @@ const deserializer = ($, _) => {
 
 /**
  * Returns a deserialized value from a serialized array of Records.
- * @param {import('./types.js').Serialized[]} serialized a previously serialized value.
- * @returns {any}
+ * @param serialized - a previously serialized value.
  */
 const deserialize = serialized => deserializer(new Map, serialized)(0);
 exports.deserialize = deserialize;
