@@ -5,10 +5,9 @@
   "main": "./cjs/index.js",
   "types": "./esm/index.d.ts",
   "scripts": {
-    "build": "npm run cjs && npm run rollup:json && npm run test && npm run copy-d-ts-into-cjs",
+    "build": "npm run cjs && npm run rollup:json && npm run copy-d-ts-into-cjs && npm run test",
     "cjs": "ascjs esm cjs",
-    "generate-types-from-jsdoc": "npx -p typescript tsc --build --clean && npx -p typescript tsc",
-    "copy-d-ts-into-cjs": "cpy ./esm/*.d.ts ./cjs/",
+    "copy-d-ts-into-cjs": "node ./copy-d-ts.js",
     "coverage": "c8 report --reporter=text-lcov > ./coverage/lcov.info",
     "rollup:json": "rollup --config rollup/json.config.js",
     "test": "c8 node test/index.js"
@@ -26,7 +25,6 @@
     "ascjs": "^5.0.1",
     "c8": "^7.10.0",
     "coveralls": "^3.1.1",
-    "cpy-cli": "^4.2.0",
     "rollup": "^2.59.0",
     "rollup-plugin-terser": "^7.0.2"
   },
