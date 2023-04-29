@@ -1,6 +1,6 @@
-import { Clonable, Serialized } from "./internal";
+import { Cloneable, Serialized } from "./internal.js";
 
 export function serialize(
-  value: Clonable,
+  value: Cloneable,
   options?: { lossy?: boolean; json?: boolean }
 ): Serialized[];

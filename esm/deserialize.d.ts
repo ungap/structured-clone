@@ -1,3 +1,3 @@
-import { Clonable, Serialized } from "./internal";
+import { Cloneable, Serialized } from "./internal.js";
 
-export function deserialize(serialized: Serialized[]): Clonable;
+export function deserialize(serialized: Serialized[]): Cloneable;
