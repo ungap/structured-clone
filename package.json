@@ -21,21 +21,23 @@
   "author": "Andrea Giammarchi",
   "license": "ISC",
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@rollup/plugin-terser": "^0.4.1",
     "ascjs": "^5.0.1",
-    "c8": "^7.10.0",
+    "c8": "^7.13.0",
     "coveralls": "^3.1.1",
-    "rollup": "^2.59.0",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup": "^3.21.1"
   },
   "module": "./esm/index.js",
   "type": "module",
   "exports": {
     ".": {
+      "types": "./esm/index.d.ts",
       "import": "./esm/index.js",
       "default": "./cjs/index.js"
     },
     "./json": {
+      "types": "./esm/json.d.ts",
       "import": "./esm/json.js",
       "default": "./cjs/json.js"
     },
