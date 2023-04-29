@@ -120,7 +120,7 @@ type StructuredCloneSupportedTypes =
  * Copy-Paste from MDN on 2023-04-28
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm#supported_types
  */
-type SupportedPrimitives = Omit<Primitives, Symbol>; // Not symbol
+type SupportedPrimitives = Exclude<Primitives, Symbol>; // Not symbol
 
 /**
  * Copy-Paste from MDN on 2023-04-28
@@ -152,6 +152,7 @@ type TypedArray =
   | Int32Array
   | Float32Array
   // 64
-  | Float64Array
-  // | BigUInt64Array // This is specified by MDN, but didn't have a definition in the Typescript lib
-  | BigInt64Array;
+  | Float64Array;
+// These are specified by MDN, but didn't have a definition in the Typescript lib
+// | BigUInt64Array // unknown
+// | BigInt64Array // es2020
