@@ -1,16 +1,6 @@
 import {deserialize} from './deserialize.js';
 import {serialize} from './serialize.js';
 
-/**
- * Polyfilled structuredClone function.
- *
- * @note If only standard options are provided (`transfer` is standard,
- * while `json` is not), and If a native implementation of `structuredClone()`
- * is available at the time of invocation, the native implementation is
- * used instead of this module's code. In this case, The `transfer`
- * property in the `options` parameter is not supported—all values
- * are always cloned.
- */
 export default typeof structuredClone === "function" ?
   /* c8 ignore start */
   (any, options) => (
