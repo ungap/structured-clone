@@ -142,16 +142,11 @@ const serializer = (strict, json, $, _) => {
 };
 
 /**
- * @typedef {Array<string,any>} Record a type representation
- */
-
-/**
  * Returns an array of serialized Records.
- * @param {any} value a serializable value.
- * @param {{lossy?: boolean}?} options an object with a `lossy` property that,
+ * @param value - a serializable value.
+ * @param options -  an object with a `lossy` property that,
  *  if `true`, will not throw errors on incompatible types, and behave more
  *  like JSON stringify would behave. Symbol and Function will be discarded.
- * @returns {Record[]}
  */
  const serialize = (value, {json, lossy} = {}) => {
   const _ = [];
