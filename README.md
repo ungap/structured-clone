@@ -7,7 +7,6 @@ An env agnostic serializer and deserializer with recursion ability and types bey
   * [Supported Types](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm#supported_types)
     * *not supported yet*: Blob, File, FileList, ImageBitmap, ImageData, and ArrayBuffer, but typed arrays are supported without major issues, but u/int8, u/int16, and u/int32 are the only safely suppored (right now).
     * *not possible to implement*: the `{transfer: []}` option can be passed but it's completely ignored.
-    * Typescript types require your tsconfig.json to have a `target`/`lib` value of `es2015` or later to work properly.
   * [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/structuredClone)
   * [Serializer](https://html.spec.whatwg.org/multipage/structured-data.html#structuredserializeinternal)
   * [Deserializer](https://html.spec.whatwg.org/multipage/structured-data.html#structureddeserialize)
