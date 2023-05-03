@@ -26,9 +26,9 @@ import type { Cloneable } from "./internal.js";
 export default function <T extends Cloneable>(
   any: T,
   options?: {
-    transfer: Transferable[]; // Standard
-    json: boolean; // Nonstandard
-    lossy: boolean; // Nonstandard
+    transfer?: Transferable[]; // Standard
+    json?: boolean; // Nonstandard
+    lossy?: boolean; // Nonstandard
   }
 ): T;
 
