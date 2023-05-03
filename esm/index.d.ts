@@ -20,7 +20,7 @@ import type { Cloneable } from "./internal.js";
  *
  * @param options - `transfer` is standard. `json` & `lossy` are not standard.
  */
-export default function <T extends Cloneable>(
+export default function <T extends any>(
   any: T,
   options?: {
     transfer?: Transferable[]; // Standard
