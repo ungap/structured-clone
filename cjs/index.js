@@ -9,8 +9,9 @@ const {serialize} = require('./serialize.js');
 /**
  * Returns an array of serialized Records.
  * @param {any} any a serializable value.
- * @param {{transfer: any[]}?} options an object with a transfoer property.
- *  This is currently not supported, all values are always cloned.
+ * @param {{transfer?: any[], json?: boolean, lossy?: boolean}?} options an object with
+ * a transfer option (ignored when polyfilled) and/or non standard fields that
+ * fallback to the polyfill if present.
  * @returns {Record[]}
  */
 Object.defineProperty(exports, '__esModule', {value: true}).default = typeof structuredClone === "function" ?
