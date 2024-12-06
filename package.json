@@ -28,6 +28,7 @@
   },
   "module": "./esm/index.js",
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": {
       "import": "./esm/index.js",
