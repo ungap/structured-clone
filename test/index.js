@@ -158,3 +158,5 @@ assert(lossy2[2].size, 0);
 assert(lossy2[3].size, 0);
 assert(JSON.stringify(lossy2[4]), '{}');
 assert(lossy2[5], 'OK');
+
+require('./eval.js');
