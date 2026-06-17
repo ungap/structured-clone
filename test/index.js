@@ -14,6 +14,16 @@ assert(withUndefined, '[[2,[[1,2],[3,4],[5,6]]],[0,"foo"],[0,"test"],[0,"bar"],[
 assert(Object.keys(parse(withUndefined)).join(','), 'foo,bar,foobar');
 assert(parse(withUndefined).bar, void 0);
 
+// an own `__proto__` property must survive deserialization rather than
+// being applied as a prototype setter (which silently drops it)
+const withProto = JSON.parse('{"__proto__": 42, "kept": 1}');
+const clonedProto = deserialize(serialize(withProto));
+const protoDescriptor = Object.getOwnPropertyDescriptor(clonedProto, '__proto__');
+assert(!!protoDescriptor, true, 'own __proto__ property should survive deserialize');
+assert(protoDescriptor && protoDescriptor.value, 42, '__proto__ value should be preserved');
+assert(Object.getPrototypeOf(clonedProto), Object.prototype, 'prototype must not be mutated');
+assert(clonedProto.kept, 1, 'sibling property should be preserved');
+
 const date = new Date;
 
 const { buffer } = new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7]);

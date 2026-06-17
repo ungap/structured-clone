@@ -41,8 +41,22 @@ const deserializer = ($, _) => {
       }
       case OBJECT: {
         const object = as({}, index);
-        for (const [key, index] of value)
-          object[unpair(key)] = unpair(index);
+        for (const [key, index] of value) {
+          const name = unpair(key);
+          const data = unpair(index);
+          // `object.__proto__ = data` triggers the prototype setter
+          // instead of defining an own property, so the property is
+          // silently dropped on the round-trip; define it explicitly.
+          if (name === '__proto__')
+            Object.defineProperty(object, name, {
+              value: data,
+              writable: true,
+              enumerable: true,
+              configurable: true
+            });
+          else
+            object[name] = data;
+        }
         return object;
       }
       case DATE:
