@@ -119,7 +119,7 @@ const serializer = (strict, json, $, _) => {
         return index;
       }
       case DATE:
-        return as([TYPE, value.toISOString()], value);
+        return as([TYPE, isNaN(value.getTime()) ? EMPTY : value.toISOString()], value);
       case REGEXP: {
         const {source, flags} = value;
         return as([TYPE, {source, flags}], value);
