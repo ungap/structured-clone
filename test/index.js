@@ -159,4 +159,13 @@ assert(lossy2[3].size, 0);
 assert(JSON.stringify(lossy2[4]), '{}');
 assert(lossy2[5], 'OK');
 
+// an Invalid Date must round-trip like native structuredClone instead of throwing
+const invalidDate = new Date(NaN);
+const invalidViaRecord = deserialize(serialize(invalidDate));
+assert(invalidViaRecord instanceof Date, true);
+assert(Number.isNaN(invalidViaRecord.getTime()), true);
+const invalidViaJSON = parse(stringify(invalidDate));
+assert(invalidViaJSON instanceof Date, true);
+assert(Number.isNaN(invalidViaJSON.getTime()), true);
+
 require('./eval.js');
