@@ -24,7 +24,12 @@
     "ascjs": "^6.0.3",
     "c8": "^11.0.0",
     "coveralls": "^3.1.1",
-    "rollup": "^4.60.3"
+    "rollup": "^4.62.2"
+  },
+  "overrides": {
+    "c8": {
+      "yargs": "^18.0.0"
+    }
   },
   "module": "./esm/index.js",
   "type": "module",
