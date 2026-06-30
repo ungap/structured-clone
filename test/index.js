@@ -168,4 +168,17 @@ const invalidViaJSON = parse(stringify(invalidDate));
 assert(invalidViaJSON instanceof Date, true);
 assert(Number.isNaN(invalidViaJSON.getTime()), true);
 
+// -0 and +0 must round-trip distinctly like native structuredClone, even when
+// both appear in the same value. The serialize memo is a Map, whose keys use
+// SameValueZero, so without care +0 and -0 collapse onto a single record.
+const zeros = deserialize(serialize([-0, 0]));
+assert(zeros[0], -0, `expected -0 at [0], got ${zeros[0]}`);
+assert(zeros[1], 0, `expected +0 at [1], got ${zeros[1]}`);
+const zerosRev = deserialize(serialize([0, -0]));
+assert(zerosRev[0], 0, `expected +0 at [0], got ${zerosRev[0]}`);
+assert(zerosRev[1], -0, `expected -0 at [1], got ${zerosRev[1]}`);
+const zerosObj = deserialize(serialize({neg: -0, pos: 0}));
+assert(zerosObj.neg, -0, `expected -0 for neg, got ${zerosObj.neg}`);
+assert(zerosObj.pos, 0, `expected +0 for pos, got ${zerosObj.pos}`);
+
 require('./eval.js');

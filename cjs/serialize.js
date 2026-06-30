@@ -47,14 +47,21 @@ const shouldSkip = ([TYPE, type]) => (
 
 const serializer = (strict, json, $, _) => {
 
+  // `$` memoizes seen values to preserve shared references and handle cycles,
+  // but it is a Map and Map keys use SameValueZero, which treats -0 and +0 as
+  // the same key. Negative zero must skip the memo so it is never conflated
+  // with +0, which native structuredClone (and the default clone) keep apart.
+  const memoizable = value => !Object.is(value, -0);
+
   const as = (out, value) => {
     const index = _.push(out) - 1;
-    $.set(value, index);
+    if (memoizable(value))
+      $.set(value, index);
     return index;
   };
 
   const pair = value => {
-    if ($.has(value))
+    if (memoizable(value) && $.has(value))
       return $.get(value);
 
     let [TYPE, type] = typeOf(value);
