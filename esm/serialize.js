@@ -53,7 +53,9 @@ const serializer = (strict, json, $, _) => {
   // but it is a Map and Map keys use SameValueZero, which treats -0 and +0 as
   // the same key. Negative zero must skip the memo so it is never conflated
   // with +0, which native structuredClone (and the default clone) keep apart.
-  const memoizable = value => !Object.is(value, -0);
+  // Gate the Object.is check behind a number/zero test so it only runs for
+  // zero-valued numbers; every other value short-circuits before it.
+  const memoizable = value => !(typeof value === "number" && !value && Object.is(value, -0));
 
   const as = (out, value) => {
     const index = _.push(out) - 1;
