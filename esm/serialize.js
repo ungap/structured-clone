@@ -37,7 +37,7 @@ const typeOf = value => {
     return [ARRAY, asString];
 
   if (value instanceof Error)
-    return [ERROR, value.name];
+    return [ERROR, value.name || 'Error'];
 
   return [OBJECT, asString];
 };

@@ -189,6 +189,9 @@ for (const Class of [Error, EvalError, RangeError, ReferenceError, SyntaxError, 
   assert(viaRecord.constructor, native.constructor, 'custom error must match native constructor');
   assert(viaRecord.message, native.message);
   assert(viaRecord.name, native.name);
+
+  custom.name = '';
+  assert(deserialize(serialize(custom)).name, 'Error', 'empty name results into Error');
 }
 
 require('./eval.js');
