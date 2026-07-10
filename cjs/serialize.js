@@ -34,8 +34,8 @@ const typeOf = value => {
   if (asString.includes('Array'))
     return [ARRAY, asString];
 
-  if (asString.includes('Error'))
-    return [ERROR, asString];
+  if (value instanceof Error)
+    return [ERROR, value.name];
 
   return [OBJECT, asString];
 };

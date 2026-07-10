@@ -67,7 +67,7 @@ const deserializer = ($, _) => {
       }
       case ERROR: {
         const {name, message} = value;
-        return as(guard(name, message), index);
+        return as(typeof env[name] === 'function' ? guard(name, message) : new Error(message), index);
       }
       case BIGINT:
         return as(BigInt(value), index);

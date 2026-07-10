@@ -168,4 +168,27 @@ const invalidViaJSON = parse(stringify(invalidDate));
 assert(invalidViaJSON instanceof Date, true);
 assert(Number.isNaN(invalidViaJSON.getTime()), true);
 
+// error subtypes must round-trip to their own constructor like native structuredClone
+for (const Class of [Error, EvalError, RangeError, ReferenceError, SyntaxError, TypeError, URIError]) {
+  const errorViaRecord = deserialize(serialize(new Class('boom')));
+  assert(errorViaRecord instanceof Class, true, `${Class.name} must clone as ${Class.name}`);
+  assert(errorViaRecord.name, Class.name);
+  assert(errorViaRecord.message, 'boom');
+}
+
+// a custom-named error (name is not a global constructor) must serialize its real name,
+// then revive as a plain Error, exactly like native structuredClone does
+{
+  const custom = new Error('boom');
+  custom.name = 'CustomBunError';
+  // serialize must preserve the actual name, not fall back to 'Error'
+  assert(serialize(custom)[0][1].name, 'CustomBunError', 'serialize must preserve the custom error name');
+  const viaRecord = deserialize(serialize(custom));
+  const native = globalThis.structuredClone(custom);
+  assert(viaRecord instanceof Error, true, 'custom error must revive as Error');
+  assert(viaRecord.constructor, native.constructor, 'custom error must match native constructor');
+  assert(viaRecord.message, native.message);
+  assert(viaRecord.name, native.name);
+}
+
 require('./eval.js');
