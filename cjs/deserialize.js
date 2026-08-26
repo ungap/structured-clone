@@ -3,6 +3,7 @@ const {
   VOID, PRIMITIVE, ARRAY, OBJECT, DATE, REGEXP, MAP, SET, ERROR, BIGINT
 } = require('./types.js');
 
+const { defineProperty } = Object;
 const env = typeof self === 'object' ? self : globalThis;
 
 const guard = (name, init) => {
@@ -41,8 +42,16 @@ const deserializer = ($, _) => {
       }
       case OBJECT: {
         const object = as({}, index);
-        for (const [key, index] of value)
-          object[unpair(key)] = unpair(index);
+        for (const [key, index] of value) {
+          const k = unpair(key), value = unpair(index);
+          if (k === '__proto__') defineProperty(object, k, {
+            value,
+            configurable: true,
+            enumerable: true,
+            writable: true
+          });
+          else object[k] = value;
+        }
         return object;
       }
       case DATE:

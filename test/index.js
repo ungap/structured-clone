@@ -192,6 +192,8 @@ for (const Class of [Error, EvalError, RangeError, ReferenceError, SyntaxError, 
 
   custom.name = '';
   assert(deserialize(serialize(custom)).name, 'Error', 'empty name results into Error');
+
+  assert(deserialize(serialize(JSON.parse('{"__proto__": {"foo": "bar"}}'))).foo, undefined);
 }
 
 require('./eval.js');
