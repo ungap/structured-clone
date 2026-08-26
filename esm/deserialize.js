@@ -93,6 +93,7 @@ const deserializer = ($, _) => {
         const { buffer } = new Uint8Array(value);
         return as(new DataView(buffer), value);
       }
+      case '-0': return -0;
     }
     return as(guard(type, value), index);
   };

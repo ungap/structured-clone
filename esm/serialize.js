@@ -8,7 +8,7 @@ import {
 const EMPTY = '';
 
 const {toString} = {};
-const {keys} = Object;
+const {keys, is} = Object;
 
 const typeOf = value => {
   const type = typeof value;
@@ -67,6 +67,10 @@ const serializer = (strict, json, $, _) => {
           case 'bigint':
             TYPE = BIGINT;
             entry = value.toString();
+            break;
+          case 'number':
+            if (!value && is(value, -0))
+              return _.push(['-0']) - 1;
             break;
           case 'function':
           case 'symbol':
