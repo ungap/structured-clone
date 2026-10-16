@@ -86,10 +86,10 @@ const deserializer = ($, _) => {
       case 'BigInt':
         return as(Object(BigInt(value)), index);
       case 'ArrayBuffer':
-        return as(new Uint8Array(value).buffer, value);
+        return as(new Uint8Array(value).buffer, index);
       case 'DataView': {
         const { buffer } = new Uint8Array(value);
-        return as(new DataView(buffer), value);
+        return as(new DataView(buffer), index);
       }
       case '-0': return -0;
     }
