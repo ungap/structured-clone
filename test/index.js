@@ -8,6 +8,25 @@ const assert = (expected, result, message = '') => {
   }
 };
 
+{
+  const buffer = new Uint8Array([10, 20, 30]).buffer;
+  for (const value of [buffer, new DataView(buffer)]) {
+    const original = {
+      first: value,
+      second: value,
+      map: new Map([[value, value]])
+    };
+    for (const result of [deserialize(serialize(original)), parse(stringify(original))]) {
+      assert(result.first === value, false, 'clones the original value');
+      assert(result.first, result.second, 'preserves repeated buffer or view references');
+      assert(result.map.get(result.first), result.first, 'preserves Map key and value references');
+      const bytes = result.first instanceof DataView ?
+        new Uint8Array(result.first.buffer) : new Uint8Array(result.first);
+      assert([...bytes].join(','), '10,20,30');
+    }
+  }
+}
+
 // @see https://github.com/ungap/structured-clone/issues/4
 const withUndefined = stringify({foo: 'test', bar: undefined, foobar: null});
 assert(withUndefined, '[[2,[[1,2],[3,4],[5,6]]],[0,"foo"],[0,"test"],[0,"bar"],[-1],[0,"foobar"],[0,null]]');
