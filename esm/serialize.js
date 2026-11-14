@@ -8,7 +8,7 @@ import {
 const EMPTY = '';
 
 const {toString} = {};
-const {keys, is} = Object;
+const {keys, is, getOwnPropertyDescriptor} = Object;
 
 const typeOf = value => {
   const type = typeof value;
@@ -151,7 +151,15 @@ const serializer = (strict, json, $, _) => {
     }
 
     const {message} = value;
-    return as([TYPE, {name: type, message}], value);
+    const error = {name: type, message};
+    const index = as([TYPE, error], value);
+    const descriptor = getOwnPropertyDescriptor(value, 'cause');
+    if (descriptor && 'value' in descriptor) {
+      const cause = descriptor.value;
+      if (strict || !shouldSkip(typeOf(cause)))
+        error.cause = pair(cause);
+    }
+    return index;
   };
 
   return pair;
