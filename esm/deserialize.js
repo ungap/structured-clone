@@ -6,6 +6,7 @@ import {
 } from './types.js';
 
 const { defineProperty } = Object;
+const {hasOwnProperty} = Object.prototype;
 const env = typeof self === 'object' ? self : globalThis;
 
 const guard = (name, init) => {
@@ -76,12 +77,19 @@ const deserializer = ($, _) => {
       }
       case ERROR: {
         const {name, message} = value;
-        return as(
+        const error = as(
           typeof env[name] === 'function' ?
             guard(name, message) :
             new Error(message),
           index
         );
+        if (hasOwnProperty.call(value, 'cause'))
+          defineProperty(error, 'cause', {
+            value: unpair(value.cause),
+            configurable: true,
+            writable: true
+          });
+        return error;
       }
       case BIGINT:
         return as(BigInt(value), index);

@@ -199,3 +199,5 @@ for (const Class of [Error, EvalError, RangeError, ReferenceError, SyntaxError, 
 }
 
 require('./eval.js');
+
+require('./error-cause.js');
