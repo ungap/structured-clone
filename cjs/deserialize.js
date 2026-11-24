@@ -15,6 +15,8 @@ const guard = (name, init) => {
     case 'setInterval':
     case 'setTimeout':
       throw new TypeError('unable to deserialize ' + name);
+    case 'AggregateError':
+      return new env[name]([], init);
   }
   return new env[name](init);
 };
