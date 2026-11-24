@@ -176,6 +176,21 @@ for (const Class of [Error, EvalError, RangeError, ReferenceError, SyntaxError, 
   assert(errorViaRecord.message, 'boom');
 }
 
+// AggregateError takes its message after the errors iterable, not as that iterable
+for (const message of ['group', '']) {
+  const original = new AggregateError([], message);
+  for (const cloned of [
+    deserialize(serialize(original)),
+    parse(stringify(original)),
+    structuredClone(original, {lossy: true})
+  ]) {
+    assert(cloned instanceof AggregateError, true);
+    assert(cloned.name, 'AggregateError');
+    assert(cloned.message, message);
+    assert(cloned.errors.length, 0);
+  }
+}
+
 // a custom-named error (name is not a global constructor) must serialize its real name,
 // then revive as a plain Error, exactly like native structuredClone does
 {
